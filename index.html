@@ -1,0 +1,209 @@
+<!DOCTYPE HTML>
+<!--
+	Intensify by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>Word of the Day Detector</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body onload="checkBrowser()">
+
+		<!-- Header -->
+			<header id="header">
+			
+			</header>			
+
+		<!-- Banner -->
+			<section id="banner">
+				<div class="content">
+					<h1>Word of the Day Detector</h1>
+					<p>Set a word of the day.<br />Have a class discussion. <br/>Enjoy.</p>
+					<ul class="actions">
+						<li><a href="#one" class="button scrolly" onclick="setWordofDay()">Get Started</a></li>
+					</ul>
+				</div>
+			</section>
+
+		<!-- One -->
+			<section id="one" class="wrapper">
+				<br>
+				<br>
+				<br>
+				<br>
+				<div class="inner flex flex-3">
+						<div>
+							<h3 id="update"></h3>
+							<p id="word" style="color:red"></p>
+						</div>
+						<ul id="startButton" class="actions">
+							<li><a href="#two" class="button scrolly" onclick="startVoiceRecognition()">Start Listening for the Word of the Day</a></li>
+						</ul>
+				</div>
+			</section>
+			<section id="two" class="wrapper">
+				<br>
+				<br>
+				<br>
+				<div class="inner flex flex-3">
+						
+						<div>
+							<h3 id="statusText"></h3>
+							<img id="gif" src="https://media.giphy.com/media/l0HlMr2G3EKFgpUY0/giphy.gif">
+							<br><br><br><br><br><br><br><br><br><br><br>
+						</div>
+						<ul id="restartButton" class="actions">
+							<li><a href="#two" class="button scrolly" onclick="reInitiateVoiceRecognition()">Restart</a></li>
+						</ul>
+				</div>
+				<br><br><br><br><br><br><br><br><br><br><br>
+			</section>
+
+		<!-- Footer -->
+			<footer id="footer">
+				
+				<div class="copyright">
+					&copy; Miles Coleman. Design <a href="https://templated.co">TEMPLATED</a>.
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script>
+				let wordOftheDay = ""
+				let workingBrowser = false
+				function checkBrowser(){
+					if ('webkitSpeechRecognition' in window) {
+						workingBrowser = true
+      				} else {
+        			alert("Your current browser does not support speech recognition. Try Google Chrome.")
+					}
+    			}
+				function setWordofDay(){
+					 wordOfTheDay = prompt("Enter your word of the day", "your word");
+			 
+					if (wordOfTheDay != null) {
+  						document.getElementById("update").innerHTML =
+  						"Word of the day is set to: "; 
+  						document.getElementById("word").innerHTML =
+  						wordOfTheDay;
+  						
+  						var button = document.getElementById("startButton");
+  							if (button.style.display === "none") {
+    						button.style.display = "block";
+  							} else {
+   			 				button.style.display = "block";
+  							}
+					}
+				}
+				function reInitiateVoiceRecognition(){
+					var button = document.getElementById("restartButton");
+					if (button.style.display === "block") {
+						button.style.display = "none";
+					} else {
+						button.style.display = "none";
+					}
+					startVoiceRecognition()
+				}
+				function startVoiceRecognition(){
+  						if (workingBrowser == true) {
+  							console.log('voice control initiated')
+  							document.getElementById("statusText").innerHTML =
+  							"Listening for the word of the day..."
+  						}
+  						if (workingBrowser == false) {
+  							console.log('voice control not supported')
+  							document.getElementById("statusText").innerHTML =
+  							"Voice recognition not supported by this browser. The app works best with Google Chrome."
+  						}
+						  window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+						  let finalTranscript = '';
+						  let recognition = new window.SpeechRecognition();
+						  recognition.interimResults = true;
+						  recognition.maxAlternatives = 0;
+						  recognition.continuous = true;
+						  recognition.onspeechend = function() {
+  							console.log('Speech has stopped being detected');
+  							document.getElementById("statusText").innerHTML =
+  						    "Error. No speech detected. App disengages microphone after 20 seconds of silence. Click Restart to restart microphone."
+  						    	var button = document.getElementById("restartButton");
+								if (button.style.display === "none") {
+								button.style.display = "block";
+								} else {
+								button.style.display = "block";
+								}
+							}
+						  recognition.onresult = (event) => {
+						  let interimTranscript = '';
+							for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
+							  let transcript = event.results[i][0].transcript;
+								if (event.results[i].isFinal) {
+								  finalTranscript += transcript;
+								} else {
+								  interimTranscript += transcript;
+								}
+								  if (interimTranscript.includes(wordOfTheDay)) {
+										var image = document.getElementById("gif");
+										if (image.style.display === "none") {
+											image.style.display = "block";
+										}
+										else{
+											image.style.display = "block"
+										}
+										var audio = new Audio("assets/sounds/mlg-air-horn.mp3");
+										audio.play();
+										document.getElementById("statusText").innerHTML =
+  										"WORD OF THE DAY DETECTED!!!!!!!"
+								  }
+								  if (finalTranscript == null) {
+									console.log('Speech has stopped being detected');
+  									document.getElementById("statusText").innerHTML =
+  						    		"Error. No speech detected. App disengages microphone after 20 seconds of silence. Click Restart to restart microphone."
+  						    			var button = document.getElementById("restartButton");
+										if (button.style.display === "none") {
+										button.style.display = "block";
+										} else {
+										button.style.display = "block";
+										}
+             						 }
+              							
+							}
+							console.log("transcript: " + interimTranscript)
+						}
+						recognition.start()
+				}
+			</script>
+
+	</body>
+</html>
+<style>
+#startButton {
+display: none;
+}
+#restartButton {
+display: none;
+}
+#gif {
+display: none;
+height: 400px;
+}
+#statusText{
+    animation:blinkingText 1.2s infinite;
+}
+@keyframes blinkingText{
+    0%{     color: green;    }
+    49%{    color: green; }
+    60%{    color: transparent; }
+    99%{    color:transparent;  }
+    100%{   color: green;    }
+}
+
+</style>
