@@ -53,6 +53,8 @@
 						
 						<div>
 							<h3 id="statusText"></h3>
+							<h3 id="statusText2"></h3>
+							<h3 id="statusText3"></h3>
 							<img id="gif" src="https://media.giphy.com/media/l0HlMr2G3EKFgpUY0/giphy.gif">
 							<br><br><br><br><br><br><br><br><br><br><br>
 						</div>
@@ -106,6 +108,13 @@
 				}
 				function reInitiateVoiceRecognition(){
 					var button = document.getElementById("restartButton");
+					document.getElementById("statusText3").innerHTML =
+  					""
+					document.getElementById("statusText2").innerHTML =
+  					""
+  					document.getElementById("statusText3").innerHTML =
+  					""
+  						    	
 					if (button.style.display === "block") {
 						button.style.display = "none";
 					} else {
@@ -121,7 +130,7 @@
   						}
   						if (workingBrowser == false) {
   							console.log('voice control not supported')
-  							document.getElementById("statusText").innerHTML =
+  							document.getElementById("statusText2").innerHTML =
   							"Voice recognition not supported by this browser. The app works best with Google Chrome."
   						}
 						  window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
@@ -133,6 +142,8 @@
 						  recognition.onspeechend = function() {
   							console.log('Speech has stopped being detected');
   							document.getElementById("statusText").innerHTML =
+  							""
+  							document.getElementById("statusText3").innerHTML =
   						    "Error. No speech detected. App disengages microphone after 20 seconds of silence. Click Restart to restart microphone."
   						    	var button = document.getElementById("restartButton");
 								if (button.style.display === "none") {
@@ -204,6 +215,26 @@ height: 400px;
     60%{    color: transparent; }
     99%{    color:transparent;  }
     100%{   color: green;    }
+}
+#statusText2{
+    animation:blinkingText2 1.2s infinite;
+}
+@keyframes blinkingText2{
+    0%{     color: orange;    }
+    49%{    color: orange; }
+    60%{    color: transparent; }
+    99%{    color:transparent;  }
+    100%{   color: orange;    }
+}
+#statusText3{
+    animation:blinkingText3 1.2s infinite;
+}
+@keyframes blinkingText3{
+    0%{     color: red;    }
+    49%{    color: red; }
+    60%{    color: transparent; }
+    99%{    color:transparent;  }
+    100%{   color: red;    }
 }
 
 </style>
