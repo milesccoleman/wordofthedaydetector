@@ -85,35 +85,36 @@
 				function checkBrowser(){
 					if ('webkitSpeechRecognition' in window) {
 						workingBrowser = true
+						console.log("supported browser detected")
       				} else {
         			alert("Your current browser does not support speech recognition. Try Google Chrome.")
 					}
     			}
+    			
 				function setWordofDay(){
 					 wordOfTheDay = prompt("Enter your word of the day", "your word");
 			 
-					if (wordOfTheDay != null) {
-  						document.getElementById("update").innerHTML =
-  						"Word of the day is set to: "; 
-  						document.getElementById("word").innerHTML =
-  						wordOfTheDay;
-  						
-  						var button = document.getElementById("startButton");
-  							if (button.style.display === "none") {
-    						button.style.display = "block";
-  							} else {
-   			 				button.style.display = "block";
-  							}
-					}
+						if (wordOfTheDay != null) {
+							document.getElementById("update").innerHTML = "Word of the day is set to: "; 
+							document.getElementById("word").innerHTML = wordOfTheDay;
+						
+							var button = document.getElementById("startButton");
+								if (button.style.display === "none") {
+								button.style.display = "block";
+								} else {
+								button.style.display = "block";
+								}
+						}
 				}
+				
 				function reInitiateVoiceRecognition(){
 					var button = document.getElementById("restartButton");
 					document.getElementById("statusText3").innerHTML =
   					""
 					document.getElementById("statusText2").innerHTML =
-  					""
+  					" "
   					document.getElementById("statusText3").innerHTML =
-  					""
+  					" "
   						    	
 					if (button.style.display === "block") {
 						button.style.display = "none";
@@ -124,9 +125,7 @@
 				}
 				function startVoiceRecognition(){
   						if (workingBrowser == true) {
-  							console.log('voice control initiated')
-  							document.getElementById("statusText").innerHTML =
-  							"Listening for the word of the day..."
+
   						}
   						if (workingBrowser == false) {
   							console.log('voice control not supported')
@@ -139,12 +138,19 @@
 						  recognition.interimResults = true;
 						  recognition.maxAlternatives = 0;
 						  recognition.continuous = true;
+						  
+						  recognition.onstart = function() {
+						  	console.log('voice control initiated')
+							document.getElementById("statusText").innerHTML =
+  							"Listening for the word of the day..."
+						  }
+						  
 						  recognition.onspeechend = function() {
   							console.log('Speech has stopped being detected');
   							document.getElementById("statusText").innerHTML =
-  							""
+  							" "
   							document.getElementById("statusText3").innerHTML =
-  						    "Error. No speech detected. App disengages microphone after 20 seconds of silence. Click Restart to restart microphone."
+  						    "Error. No speech detected. App disengages microphone after 20 seconds of silence. Click Restart to reinitiate microphone."
   						    	var button = document.getElementById("restartButton");
 								if (button.style.display === "none") {
 								button.style.display = "block";
@@ -152,6 +158,7 @@
 								button.style.display = "block";
 								}
 							}
+							
 						  recognition.onresult = (event) => {
 						  let interimTranscript = '';
 							for (let i = event.resultIndex, len = event.results.length; i < len; i++) {
@@ -161,6 +168,8 @@
 								} else {
 								  interimTranscript += transcript;
 								}
+								console.log(interimTranscript)
+								document.getElementById("statusText2").innerHTML = interimTranscript; 
 								  if (interimTranscript.includes(wordOfTheDay)) {
 										var image = document.getElementById("gif");
 										if (image.style.display === "none") {
@@ -173,6 +182,12 @@
 										audio.play();
 										document.getElementById("statusText").innerHTML =
   										"WORD OF THE DAY DETECTED!!!!!!!"
+  										var button = document.getElementById("restartButton");
+										if (button.style.display === "none") {
+										button.style.display = "block";
+										} else {
+										button.style.display = "block";
+										}
 								  }
 								  if (finalTranscript == null) {
 									console.log('Speech has stopped being detected');
@@ -185,9 +200,7 @@
 										button.style.display = "block";
 										}
              						 }
-              							
 							}
-							console.log("transcript: " + interimTranscript)
 						}
 						recognition.start()
 				}
