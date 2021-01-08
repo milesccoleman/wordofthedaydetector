@@ -61,6 +61,9 @@
 						<ul id="restartButton" class="actions">
 							<li><a href="#two" class="button scrolly" onclick="reInitiateVoiceRecognition()">Restart</a></li>
 						</ul>
+						<ul id="startOverButton" class="actions">
+							<li><a href="#one" class="button scrolly" onclick="setNewWord()">Set a New Word of the Day</a></li>
+						</ul>
 				</div>
 				<br><br><br><br><br><br><br><br><br><br><br>
 			</section>
@@ -91,13 +94,46 @@
 					}
     			}
     			
-				function setWordofDay(){
+    			function setNewWord(){
 					 wordOfTheDay = prompt("Enter your word of the day", "your word");
 			 
 						if (wordOfTheDay != null) {
 							document.getElementById("update").innerHTML = "Word of the day is set to: "; 
 							document.getElementById("word").innerHTML = wordOfTheDay;
+							
+							document.getElementById("statusText3").innerHTML = " "
+  						    	var button = document.getElementById("restartButton");
+							
+							document.getElementById("statusText").innerHTML = " "; 
+							var image = document.getElementById("gif");
+										if (image.style.display === "block") {
+											image.style.display = "none";
+										}
+										else{
+											image.style.display = "none"
+										}
 						
+							var button = document.getElementById("startButton");
+								if (button.style.display === "none") {
+								button.style.display = "block";
+								} else {
+								button.style.display = "block";
+								}
+								var button2 = document.getElementById("startOverButton");
+								if (button2.style.display === "block") {
+								button2.style.display = "none";
+								} else {
+								button2.style.display = "none";
+								}
+						}
+				}
+    			
+				function setWordofDay(){
+					 wordOfTheDay = prompt("Enter your word of the day", "your word");
+			 		 
+						if (wordOfTheDay != null) {
+							document.getElementById("update").innerHTML = "Word of the day is set to: "; 
+							document.getElementById("word").innerHTML = wordOfTheDay;						
 							var button = document.getElementById("startButton");
 								if (button.style.display === "none") {
 								button.style.display = "block";
@@ -124,8 +160,14 @@
 					startVoiceRecognition()
 				}
 				function startVoiceRecognition(){
+						var button = document.getElementById("restartButton");
+										if (button.style.display === "block") {
+										button.style.display = "none";
+										} else {
+										button.style.display = "none";
+										}
   						if (workingBrowser == true) {
-
+							document.getElementById("statusText3").innerHTML = " "
   						}
   						if (workingBrowser == false) {
   							console.log('voice control not supported')
@@ -143,6 +185,8 @@
 						  	console.log('voice control initiated')
 							document.getElementById("statusText").innerHTML =
   							"Listening for the word of the day..."
+  							document.getElementById("statusText3").innerHTML = " "
+
 						  }
 						  
 						  recognition.onspeechend = function() {
@@ -157,6 +201,7 @@
 								} else {
 								button.style.display = "block";
 								}
+								recognition.stop()
 							}
 							
 						  recognition.onresult = (event) => {
@@ -182,7 +227,7 @@
 										audio.play();
 										document.getElementById("statusText").innerHTML =
   										"WORD OF THE DAY DETECTED!!!!!!!"
-  										var button = document.getElementById("restartButton");
+  										var button = document.getElementById("startOverButton");
 										if (button.style.display === "none") {
 										button.style.display = "block";
 										} else {
@@ -213,6 +258,9 @@
 display: none;
 }
 #restartButton {
+display: none;
+}
+#startOverButton {
 display: none;
 }
 #gif {
